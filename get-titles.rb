@@ -3,7 +3,9 @@ require 'open-uri'
 def extract_titles(html)
   titles = html.scan(/'post\/title'.+\n(.+\n)/)
   titles.each do |title|
-    puts title[0].strip.gsub(/"/, '')
+    unless title.include? '<' or title.include? '>'
+      puts title[0].strip.gsub(/&amp;/, 'and').gsub(/(")|(&quot;)/, '')
+    end
   end
 end
 
