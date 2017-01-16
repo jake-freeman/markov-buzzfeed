@@ -4,7 +4,7 @@ def extract_titles(html)
   titles = html.scan(/'post\/title'.+\n(.+\n)/)
   titles.each do |title|
     unless title.include? '<' or title.include? '>'
-      puts title[0].strip.gsub(/&amp;/, 'and').gsub(/(")|(&quot;)/, '')
+      puts title[0].strip.gsub(/&amp;/, '&').gsub(/(")|(&quot;)/, '')
     end
   end
 end
