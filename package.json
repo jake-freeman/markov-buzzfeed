@@ -5,6 +5,7 @@
   "main": "buzz.js",
   "scripts": {
     "start": "npm run setup && xdg-open index.html",
+    "start-mac": "npm run setup && open index.html",
     "setup": "./title2js.js && browserify buzz.js > bundle.js"
   },
   "repository": {

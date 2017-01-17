@@ -1,21 +1,26 @@
+'use strict';
 var MarkovChain = require('markovchain'),
     $           = require('jquery'),
     titles      = require('./titles.js');
 
-console.log("Is this working!?");
 var title_chain = new MarkovChain(titles);
 
-var error_timeout_handler = null;
+var title_states = {
+    good: '',
+    bad_start: 'bad-start'
+};
 
 function main() {
     $(document).ready(function() {
+        add_jquery_plugins();
         register_form_components();
         display_title(generate_title());
     });
 }
 
 function generate_title(start) {
-    var generated_title = '';
+    var generated_title = '',
+        state = title_states.good;
     title_chain = title_chain.end(15);
     if (!start) {
         title_chain = new MarkovChain(titles);
@@ -23,13 +28,26 @@ function generate_title(start) {
     else {
         title_chain = title_chain.start(start.trim());
     }
+
     generated_title = title_chain.process();
-    console.log(generated_title);
-    return generated_title;
+    if (start && generated_title.length === start.length) {
+        title_chain = new MarkovChain(titles);
+        generated_title = start + ' ' + title_chain.process();
+        state = title_states.bad_start;
+    }
+
+    return { title: generated_title, state: state };
 }
 
-function display_title(title) {
-    $('.gen-title').text(title);
+function display_title(options) {
+    var word_wrapper_class = 'title-status';
+    var title_obj = $('.gen-title');
+    title_obj.text(options.title);
+    if (options.state !== title_states.good) {
+        title_obj.wrapStart(1, word_wrapper_class);
+        $('.' + word_wrapper_class).addClass(options.state);
+    }
+
 }
 
 function register_form_components() {
@@ -48,10 +66,10 @@ function register_form_components() {
 
             current_element.addClass('highlight-error');
             var error_duration = 100;
-            if (error_timeout_handler) {
-                clearTimeout(error_timeout_handler);
+            if (current_element.error_timeout_handler) {
+                clearTimeout(current_element.error_timeout_handler);
             }
-            error_timeout_handler = setTimeout(function() {
+            current_element.error_timeout_handler = setTimeout(function() {
                 current_element.removeClass('highlight-error');
                 error_timeout_handler = null;
             }, error_duration);
@@ -59,9 +77,24 @@ function register_form_components() {
     });
 
     $(gen_button_selector).click(function() {
-        console.log($(gen_start_selector).val());
         display_title(generate_title($(gen_start_selector).val()));
     });
+}
+
+function add_jquery_plugins() {
+    $.fn.wrapStart = function (numWords, classname) {
+        var node = this.contents().filter(function () {
+                       return this.nodeType == 3
+                   }).first(),
+            text = node.text(),
+            first = text.split(" ", numWords).join(" ");
+
+        if (!node.length) {
+            return;
+        }
+        node[0].nodeValue = text.slice(first.length);
+        node.before(`<span class="${classname}">` + first + '</span>');
+    };
 }
 
 main();
