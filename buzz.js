@@ -1,7 +1,7 @@
 'use strict';
 
 var MarkovChain = require('markovchain'),
-    $           = require('jquery'),
+    //$           = require('jquery'),
     titles      = require('./titles.js');
 
 var title_chain = new MarkovChain(titles);
@@ -11,6 +11,8 @@ var title_states = {
     bad_start: 'bad-start'
 };
 
+var title_length_slider;
+
 function main() {
     $(document).ready(function() {
         add_jquery_plugins();
@@ -19,14 +21,16 @@ function main() {
     });
 }
 
-function generate_title(start) {
+function generate_title(options) {
     var generated_title = '',
-        state = title_states.good;
-    title_chain = title_chain.end(15);
-    if (!start) {
-        title_chain = new MarkovChain(titles);
-    }
-    else {
+        state = title_states.good,
+        options = options ? options : {},
+        start = options.start,
+        contains = options.contains;
+    title_chain = new MarkovChain(titles);
+    title_chain = title_chain.end(title_length_slider.slider('getValue'));
+
+    if (start) {
         start = capitalizeFirstLetter(start).trim();
         title_chain = title_chain.start(start);
     }
@@ -76,13 +80,30 @@ function register_form_components() {
             }
             current_element.error_timeout_handler = setTimeout(function() {
                 current_element.removeClass('highlight-error');
-                error_timeout_handler = null;
+                current_element.error_timeout_handler = null;
             }, error_duration);
         }
     });
 
     $(gen_button_selector).click(function() {
-        display_title(generate_title($(gen_start_selector).val()));
+        var title_gen_options = {};
+        if ($('#gen-word-select').val() === 'start-with') {
+            title_gen_options = { start: $(gen_start_selector).val() };
+        }
+        else {
+            title_gen_options = { contains: $(gen_start_selector).val() };
+        }
+        display_title(generate_title(title_gen_options));
+    });
+
+    title_length_slider = $('#gen-len-slider').slider({
+        formatter: function(value) {
+            return 'Max title length: ' + value;
+        },
+        tooltip_position: 'bottom'
+    });
+    title_length_slider.on('slide', function(e) {
+        $('#gen-len-slider-val').text(e.value);
     });
 }
 

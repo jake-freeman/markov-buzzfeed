@@ -12,22 +12,40 @@
     <link rel="stylesheet" href="./css/styles.css">
 
     <!-- Scripts -->
-    <script src="./bundle.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="./node_modules/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="./bundle.js"></script>
   </head>
 
   <body>
     <div class="container">
-      <h1>Markov Chain Buzzfeed Title Generator</h1>
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Start title with..." id="gen-title-start">
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-primary" id="gen-title-button">Generate!</button>
-        </span>
-      </div> <!-- /input-group -->
-      <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="5" data-slider-max="25" data-slider-step="1" data-slider-value="14"/>
-      <h2 class="gen-title">Press 'Generate!' to see a title!</h2>
+      <div class="col-md-12">
+        <h1>Markov Chain Buzzfeed Title Generator</h1>
+        <div class="input-group">
+          <select id="gen-word-select" class="form-control" data-live-search="true">
+            <option value="start-with">Starts With...</option>
+            <option value="contains">Contains...</option>
+          </select>
+          <input type="text" class="form-control" placeholder="Enter word..." id="gen-title-start">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" id="gen-title-button">Generate!</button>
+          </span>
+        </div> <!-- /input-group -->
+      </div> <!-- /col -->
+    </div> <!-- /container -->
+
+    <div class="container" id="gen-controls">
+      <div class="col-md-6">
+        <input id="gen-len-slider" data-slider-id="gen-len-slider" type="text" data-slider-min="5" data-slider-max="25" data-slider-step="1" data-slider-value="15"/>
+        <span id="gen-len-slider-label">Max Title Length: <span id="gen-len-slider-val">15</span></span>
+      </div> <!-- /col -->
+    </div> <!-- /container -->
+
+    <div class="container">
+      <div class="col-md-12">
+        <h2 class="gen-title">Press 'Generate!' to see a title!</h2>
+      </div> <!-- /col -->
     </div> <!-- /container -->
   </body>
 </html>

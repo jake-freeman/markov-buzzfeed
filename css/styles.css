@@ -12,6 +12,21 @@ input:not(.highlight-error) {
   transition: all 0.5s;
 }
 
+#gen-word-select {
+    width: 25%;
+}
+#gen-title-start {
+  width: 75%;
+}
+
 .bad-start {
   color: red;
+}
+
+#gen-controls {
+  padding-top: 20px;
+}
+
+#gen-len-slider-label {
+  padding-left: 20px;
 }
