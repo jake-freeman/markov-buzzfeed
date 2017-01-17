@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
 
-    <!-- Bootstrap | Custom CSS | Open Sans Font -->
+    <!-- CSS -->
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,600,700">
+    <link rel="stylesheet" href="./node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css">
     <link rel="stylesheet" href="./css/styles.css">
-    <link type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300,600,700" rel="stylesheet">
 
     <!-- Scripts -->
     <script src="./bundle.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
   </head>
 
   <body>
@@ -24,9 +26,8 @@
           <button type="button" class="btn btn-primary" id="gen-title-button">Generate!</button>
         </span>
       </div> <!-- /input-group -->
-      <h2 class="gen-title">
-        Press 'Generate!' to see a title!
-      </h2>
+      <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="5" data-slider-max="25" data-slider-step="1" data-slider-value="14"/>
+      <h2 class="gen-title">Press 'Generate!' to see a title!</h2>
     </div> <!-- /container -->
   </body>
 </html>

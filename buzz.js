@@ -1,4 +1,5 @@
 'use strict';
+
 var MarkovChain = require('markovchain'),
     $           = require('jquery'),
     titles      = require('./titles.js');
@@ -26,7 +27,8 @@ function generate_title(start) {
         title_chain = new MarkovChain(titles);
     }
     else {
-        title_chain = title_chain.start(start.trim());
+        start = capitalizeFirstLetter(start).trim();
+        title_chain = title_chain.start(start);
     }
 
     generated_title = title_chain.process();
@@ -47,7 +49,10 @@ function display_title(options) {
         title_obj.wrapStart(1, word_wrapper_class);
         $('.' + word_wrapper_class).addClass(options.state);
     }
+}
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function register_form_components() {
