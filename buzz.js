@@ -24,9 +24,9 @@ function main() {
 function generate_title(options) {
     var generated_title = '',
         state = title_states.good,
-        options = options ? options : {},
-        start = options.start,
-        contains = options.contains;
+        start = options.start/*,
+        contains = options.contains*/;
+    options = options ? options : {};
     title_chain = new MarkovChain(titles);
     title_chain = title_chain.end(title_length_slider.slider('getValue'));
 
@@ -110,7 +110,7 @@ function register_form_components() {
 function add_jquery_plugins() {
     $.fn.wrapStart = function (numWords, classname) {
         var node = this.contents().filter(function () {
-                       return this.nodeType == 3
+                       return this.nodeType === 3;
                    }).first(),
             text = node.text(),
             first = text.split(" ", numWords).join(" ");
