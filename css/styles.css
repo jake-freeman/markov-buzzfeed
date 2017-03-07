@@ -2,7 +2,7 @@
 body {
   font-family: 'Open Sans', sans-serif !important;
   color: #111111;
-  background-color: #FCFFF5;
+  background-color: #FCFCFC;
 }
 
 input.highlight-error {
@@ -19,7 +19,8 @@ input:not(.highlight-error) {
   width: 75%;
 }
 
-.bad-start {
+.bad-start,
+.bad-whole {
   color: red;
 }
 
@@ -29,4 +30,8 @@ input:not(.highlight-error) {
 
 #gen-len-slider-label {
   padding-left: 20px;
+}
+
+#gen-len-slider .slider-selection {
+	background: #BABABA;
 }

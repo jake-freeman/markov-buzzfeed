@@ -8,7 +8,8 @@ var title_chain = new MarkovChain(titles);
 
 var title_states = {
     good: '',
-    bad_start: 'bad-start'
+    bad_start: 'bad-start',
+    bad_whole: 'bad-whole'
 };
 
 var title_length_slider;
@@ -27,17 +28,44 @@ function generate_title(options) {
         options = options ? options : {},
         start = options.start,
         contains = options.contains;
-    title_chain = new MarkovChain(titles);
-    title_chain = title_chain.end(title_length_slider.slider('getValue'));
+
+    function reset_chain(mod) {
+        mod = mod ? mod : 0;
+        title_chain = new MarkovChain(titles);
+        // with a -1 because for some reason we need that
+        title_chain = title_chain.end(+title_length_slider.slider('getValue') + mod - 1);
+    }
+
+    reset_chain();
 
     if (start) {
         start = capitalizeFirstLetter(start).trim();
         title_chain = title_chain.start(start);
+        generated_title = title_chain.process();
+    }
+    else if (contains) {
+        let success = false,
+            regex = '';
+        for (let i = 0; i < 1000; i++) {
+            generated_title = title_chain.process();
+            regex = '\\b';
+            regex += escapeRegExp(generated_title);
+            regex += '\\b';
+            if (new RegExp(regex, "i").test(contains.toLowerCase())) {
+                success = true;
+                break;
+            }
+        }
+        if (!success) {
+            state = title_states.bad_whole;
+        }
+    }
+    else {
+        generated_title = title_chain.process();
     }
 
-    generated_title = title_chain.process();
     if (start && generated_title.length === start.length) {
-        title_chain = new MarkovChain(titles);
+        reset_chain(-1);
         generated_title = start + ' ' + title_chain.process();
         state = title_states.bad_start;
     }
@@ -50,13 +78,18 @@ function display_title(options) {
     var title_obj = $('.gen-title');
     title_obj.text(options.title);
     if (options.state !== title_states.good) {
-        title_obj.wrapStart(1, word_wrapper_class);
+        var wrap_level = options.state === title_states.bad_start ? 1 : -1;
+        title_obj.wrapStart(wrap_level, word_wrapper_class);
         $('.' + word_wrapper_class).addClass(options.state);
     }
 }
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function escapeRegExp(string){
+  return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
 
 function register_form_components() {
