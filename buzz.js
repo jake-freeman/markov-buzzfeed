@@ -1,8 +1,16 @@
 'use strict';
 
 var MarkovChain = require('markovchain'),
-    //$           = require('jquery'),
     titles      = require('./titles.js');
+
+// bind jquery
+var $ = require('jquery');
+window.$ = $;
+window.jQuery = $;
+
+require('bootstrap');
+require('bootstrap-slider');
+require('./css/styles.css');
 
 var title_chain = new MarkovChain(titles);
 
@@ -23,9 +31,10 @@ function main() {
 }
 
 function generate_title(options) {
+    options = options ? options : {};
+
     var generated_title = '',
         state = title_states.good,
-        options = options ? options : {},
         start = options.start,
         contains = options.contains;
 
@@ -143,7 +152,7 @@ function register_form_components() {
 function add_jquery_plugins() {
     $.fn.wrapStart = function (numWords, classname) {
         var node = this.contents().filter(function () {
-                       return this.nodeType == 3
+                       return this.nodeType === 3;
                    }).first(),
             text = node.text(),
             first = text.split(" ", numWords).join(" ");

@@ -1,3 +1,7 @@
+@import url("../node_modules/bootstrap/dist/css/bootstrap.min.css");
+@import url("../node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css");
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:300,600,700");
+
 /* background colors / body */
 body {
   font-family: 'Open Sans', sans-serif !important;
